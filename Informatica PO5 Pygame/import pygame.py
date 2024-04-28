@@ -8,6 +8,9 @@ pygame.init()
 title_font = pygame.font.Font(None, 60)
 score_font = pygame.font.Font(None, 40)
 
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
 BLUE = (135, 206, 235)  #RGB colorcodes
 GREEN = (136, 170, 0)
 
@@ -107,9 +110,12 @@ class Game:
 
     def check_collision_with_edges(self):
         if self.snake.body[0].x == number_of_cells or self.snake.body[0].x == -1:
-            self.game_over()
+            # self.game_over()
+            self.game_over_screen()
+            
         if self.snake.body[0].y == number_of_cells or self.snake.body[0].y == -1:
-            self.game_over()
+            # self.game_over()
+            self.game_over_screen()
 
     def game_over(self):
         self.snake.reset()
@@ -121,7 +127,27 @@ class Game:
     def check_collision_with_tail(self):
         headless_body = self.snake.body[1:]
         if self.snake.body[0] in headless_body:
-            self.game_over()
+            # self.game_over()
+            self.game_over_screen()
+
+    def game_over_screen():
+        font = pygame.font.Font(None, 36)  # Lettertype en lettergrootte
+    
+        screen.fill(BLACK)  # Scherm zwart maken
+        draw_text("Game Over!", font, RED, screen, WIDTH//2, HEIGHT//2)
+        draw_text("Druk S om te Stoppen", font, WHITE, screen, WIDTH//2, HEIGHT//2 + 50)
+        pygame.display.flip()
+    
+        # Wacht op gebruikersinvoer om het spel te verlaten
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_s:
+                        pygame.quit()
+                        sys.exit()
 
 screen = pygame.display.set_mode((2*OFFSET + cell_size*number_of_cells, 2*OFFSET + cell_size*number_of_cells))
 
